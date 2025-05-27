@@ -5,7 +5,7 @@ https://wirenboard.com/wiki/Docker
 
 ## Клонирование проекта
 ```
-git clone git@github.com:rydikov/wb-topics-reader-bot.git
+git clone https://github.com/rydikov/wb-topics-reader-bot.git
 ```
 
 ## Переменные окружения
