@@ -13,8 +13,10 @@ from aiogram.types import Message
 from aiogram.utils.markdown import hbold, hcode
 
 
+LOG_LEVEL = logging.DEBUG if os.environ.get('DEBUG') else logging.INFO
+
 logging.basicConfig(
-    level=logging.DEBUG,
+    level=LOG_LEVEL,
     format='%(asctime)s %(levelname)s: %(message)s',
     datefmt='%d/%m/%Y %H:%M:%S'
 )
@@ -57,7 +59,7 @@ def on_connect(client, userdata, flags, reason_code, properties):
 def on_message(client, userdata, msg):
     payload = msg.payload.decode('utf-8')
     topics_data[msg.topic] = payload
-    logger.info(f"MQTT: {msg.topic} => {payload}")
+    logger.debug(f"MQTT: {msg.topic} => {payload}")
 
 
 mqtt_client.on_connect = on_connect
