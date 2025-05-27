@@ -1,7 +1,7 @@
-import ast
 import os
 import asyncio
 import logging
+import yaml
 
 import paho.mqtt.client as mqtt
 
@@ -23,27 +23,33 @@ logger = logging.getLogger(__name__)
 
 
 TOKEN = os.environ['TELEGRAM_TOKEN']
-MQTT_TOPICS_WITH_ADMINS = ast.literal_eval(os.environ["MQTT_TOPICS_WITH_ADMINS"])
 
-MQTT_TOPICS = list(set(item for sublist in MQTT_TOPICS_WITH_ADMINS.values() for item in sublist))
+mqtt_topics = []
 
-logger.info(MQTT_TOPICS)
-logger.info(MQTT_TOPICS_WITH_ADMINS)
+with open(os.path.join('users.yml')) as f:
+    config = yaml.safe_load(f)
+
+# Collect mqtt topics
+for user_id in config['users']:
+    for v in config['users'][user_id]:
+        if v['topic'] not in mqtt_topics:
+            mqtt_topics.append(v['topic'])
+
+logger.info(mqtt_topics)
 
 dp = Dispatcher()
-admin_ids = [int(admin_id) for admin_id in MQTT_TOPICS_WITH_ADMINS.keys()]
-dp.message.filter(F.from_user.id.in_(admin_ids))
+dp.message.filter(F.from_user.id.in_(config['users'].keys()))
 
 ### MQTT
 topics_data = {}
-mqtt_client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION1)
+mqtt_client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 
 WB_MQTT_HOST = os.environ['WB_MQTT_HOST']
 WB_MQTT_PORT = int(os.environ['WB_MQTT_PORT'])
 
-def on_connect(client, userdata, flags, rc):
+def on_connect(client, userdata, flags, reason_code, properties):
     logger.info("MQTT подключено")
-    subscriptions = [(topic, 0) for topic in MQTT_TOPICS]
+    subscriptions = [(topic, 0) for topic in mqtt_topics]
     client.subscribe(subscriptions)
 
 def on_message(client, userdata, msg):
@@ -67,8 +73,9 @@ async def command_status(message: Message) -> None:
 
     answer = ""
 
-    for val in MQTT_TOPICS_WITH_ADMINS[message.from_user.id]:
-        answer += f"{topics_data.get(val, 'No value')} \n"
+    for val in config['users'][message.from_user.id]:
+        print(val)
+        answer += hcode(f"{val['label']}: {topics_data.get(val['topic'], 'Нет данных')} \n")
 
     await message.answer(answer)
 ###

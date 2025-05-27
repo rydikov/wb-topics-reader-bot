@@ -18,16 +18,25 @@ git clone git@github.com:rydikov/wb-topics-reader-bot.git
 TELEGRAM_TOKEN - Токен бота
 WB_MQTT_HOST - Адрес хоста mqtt
 WB_MQTT_PORT - Порт mqtt
-
-MQTT_TOPICS_WITH_ADMINS = Словарь, где ключ это ID пользователя телеграмм, значение список топиков
 ```
 
-Пример:
+Далее надо создать файл users.yml в котором будут соотвествия топиков и пользователей
+
+Пример для 2х пользователей:
 
 ```
-MQTT_TOPICS_WITH_ADMINS = "{12345678: ['/devices/system/controls/Current uptime', '/devices/hwmon/controls/CPU Temperature']}"
+users:
+  53757777:
+    - topic: /devices/system/controls/Current uptime
+      label: Аптайм 
+    - topic: /devices/hwmon/controls/CPU Temperature
+      label: Температура процессора
+  53757111:
+    - topic: /devices/hwmon/controls/Board Temperature
+      label: Температура материнской платы
 ```
-Важно: ID пользователя указывается как INT, без кавычек
+
+Число в конфигурации это уникальный идентификатор пользователя
 
 
 ## Сборка 

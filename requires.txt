@@ -15,6 +15,7 @@ paho-mqtt==2.1.0
 propcache==0.3.1
 pydantic==2.11.5
 pydantic-core==2.33.2
+PyYAML==6.0.2
 typing-extensions==4.13.2
 typing-inspection==0.4.1
 yarl==1.20.0

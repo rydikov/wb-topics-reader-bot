@@ -4,6 +4,7 @@ services:
     env_file: .env
     volumes:
     - ./bot.py:/app/bot.py
+    - ./users.yml:/app/users.yml
     stdin_open: true
     tty: true
     command: python /app/bot.py
