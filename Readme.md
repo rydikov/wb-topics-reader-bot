@@ -15,7 +15,7 @@ git clone https://github.com/rydikov/wb-topics-reader-bot.git
 ```
 Список обязательных переменных:
 ```
-TELEGRAM_TOKEN - Токен бота
+TELEGRAM_TOKEN - Токен бота (создается в @BotFather)
 WB_MQTT_HOST - Адрес хоста mqtt
 WB_MQTT_PORT - Порт mqtt
 ```
@@ -40,7 +40,7 @@ users:
       label: Температура материнской платы
 ```
 
-Число в конфигурации это уникальный идентификатор пользователя
+Число в конфигурации это уникальный идентификатор пользователя, можно узнать у бота  @getmyid_bot
 
 
 ## Сборка 
@@ -64,4 +64,3 @@ docker compose up -d
 /status - Получить показания топиков
 ```
  
-
