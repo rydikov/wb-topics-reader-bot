@@ -9,3 +9,4 @@ services:
     tty: true
     restart: unless-stopped
     command: python /app/bot.py
+    network_mode: host
